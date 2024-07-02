@@ -1,6 +1,8 @@
 import sys
 from datetime import date, datetime
 
+# Note:  python dates work for any date between Jan 1, 1 AD and Dec 31, 9999 AD.
+
 # finds the number of weekdays between two dates (inclusive)
 def weekdays_between(first_date: date, second_date: date) -> int:
 	# edge case:  if they are the same day
@@ -9,7 +11,7 @@ def weekdays_between(first_date: date, second_date: date) -> int:
 
 	start_date, end_date = sorted([first_date, second_date]) # dates could be in any order; now they are earlier and later.
 	start_weekday = start_date.weekday() # Monday=0, Sunday=6.  Therefore, < 5 means weekday
-	num_days_between_inclusive = (end_date - start_date).days + 1
+	num_days_between_inclusive = days_between_inclusive(start_date, end_date)
 
 	# an interval can be considered as some full weeks plus some extra days
 	num_full_weeks_between = num_days_between_inclusive // 7
@@ -25,6 +27,12 @@ def weekdays_between(first_date: date, second_date: date) -> int:
 			num_weekdays += 1
 
 	return num_weekdays
+
+# manually calculates the days between two dates by using gregorian ordinals (day counter starting at 0001-01-01 = 1)
+def days_between_inclusive(start_date: date, end_date: date) -> int:
+	start_ordinal = start_date.toordinal()
+	end_ordinal = end_date.toordinal()
+	return end_ordinal - start_ordinal + 1
 
 # parses a YYYY-MM-DD date string from command-line-input
 def parse_date(date_str: str) -> date:
