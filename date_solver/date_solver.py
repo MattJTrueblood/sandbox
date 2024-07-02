@@ -36,17 +36,17 @@ def parse_date(date_str: str) -> date:
 
 # called when running this script directly
 def main():
-    if len(sys.argv) != 3:
-        print("Usage: python date_solver.py <date1> <date2>")
-        sys.exit(1)
+	if len(sys.argv) != 3:
+		print("Usage: python date_solver.py <date1> <date2>")
+		sys.exit(1)
 
-    # parse each of the user-inputted date strings and pass them into the weekday solver function
-    date_1 = parse_date(sys.argv[1])
-    date_2 = parse_date(sys.argv[2])
-    output = weekdays_between(date_1, date_2)
+	# parse each of the user-inputted date strings and pass them into the weekday solver function
+	date_1 = parse_date(sys.argv[1])
+	date_2 = parse_date(sys.argv[2])
+	output = weekdays_between(date_1, date_2)
 
-    # print output of weekdays_between function to user
-    print("num weekdays between inputted dates (inclusive):", output)
+	# print output of weekdays_between function to user
+	print("num weekdays between inputted dates (inclusive):", output)
 	
 if __name__ == "__main__":
-    main()
+	main()
