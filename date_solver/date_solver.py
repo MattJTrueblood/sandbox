@@ -7,11 +7,11 @@ from datetime import date, datetime, timedelta
 def weekdays_between(first_date: date, second_date: date) -> int:
 	# edge case:  if they are the same day
 	if first_date == second_date:
-		return 1 if first_date.weekday() < 5 else 0
+		return 1 if weekday_of_gregorian_ordinal(to_gregorian_ordinal(first_date)) < 5 else 0
 
 	start_date, end_date = sorted([first_date, second_date]) # dates could be in any order; now they are earlier and later.
-	start_weekday = start_date.weekday() # Monday=0, Sunday=6.  Therefore, < 5 means weekday
 	num_days_between_inclusive = days_between_inclusive(start_date, end_date)
+	start_weekday = weekday_of_gregorian_ordinal(to_gregorian_ordinal(start_date)) # Monday=0, Sunday=6.  Therefore, < 5 means weekday
 
 	# an interval can be considered as some full weeks plus some extra days
 	num_full_weeks_between = num_days_between_inclusive // 7
@@ -77,6 +77,12 @@ def gregorian_days_from_month(year: int, month: int) -> int:
 		days_in_months[1] = 29
 	result = sum(days_in_months[:month-1])
 	return result
+
+# calculates the weekday without using python's built-in datetime.  Jan 1, 1 AD (in proleptic gregorian dates) is Monday.
+# returns integer day of the week, starting with monday=0 (same as python's date.weekday() implementation)
+def weekday_of_gregorian_ordinal(ordinal: int) -> int:
+    days_since_jan_1_1_ad = ordinal - 1
+    return (days_since_jan_1_1_ad % 7)
 
 # parses a YYYY-MM-DD date string from command-line-input
 def parse_date(date_str: str) -> date:
@@ -160,6 +166,7 @@ def test_days_between_inclusive():
 			return
 
 	print("Test passed!")
+
 
 #test_my_gregorian_ordinal()
 #test_days_between_inclusive()
