@@ -7,11 +7,11 @@ from datetime import date, datetime, timedelta
 def weekdays_between(first_date: date, second_date: date) -> int:
 	# edge case:  if they are the same day
 	if first_date == second_date:
-		return 1 if weekday_of_gregorian_ordinal(to_gregorian_ordinal(first_date)) < 5 else 0
+		return 1 if weekday_of_date(first_date) < 5 else 0
 
 	start_date, end_date = sorted([first_date, second_date]) # dates could be in any order; now they are earlier and later.
 	num_days_between_inclusive = days_between_inclusive(start_date, end_date)
-	start_weekday = weekday_of_gregorian_ordinal(to_gregorian_ordinal(start_date)) # Monday=0, Sunday=6.  Therefore, < 5 means weekday
+	start_weekday = weekday_of_date(start_date) # Monday=0, Sunday=6.  Therefore, < 5 means weekday
 
 	# an interval can be considered as some full weeks plus some extra days
 	num_full_weeks_between = num_days_between_inclusive // 7
@@ -80,9 +80,10 @@ def gregorian_days_from_month(year: int, month: int) -> int:
 
 # calculates the weekday without using python's built-in datetime.  Jan 1, 1 AD (in proleptic gregorian dates) is Monday.
 # returns integer day of the week, starting with monday=0 (same as python's date.weekday() implementation)
-def weekday_of_gregorian_ordinal(ordinal: int) -> int:
-    days_since_jan_1_1_ad = ordinal - 1
-    return (days_since_jan_1_1_ad % 7)
+def weekday_of_date(some_date: date) -> int:
+	ordinal = to_gregorian_ordinal(some_date)
+	days_since_jan_1_1_ad = ordinal - 1
+	return (days_since_jan_1_1_ad % 7)
 
 # parses a YYYY-MM-DD date string from command-line-input
 def parse_date(date_str: str) -> date:
